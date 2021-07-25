@@ -1,0 +1,2 @@
+model_checkpoint_path: "D:\\Coursework\\CSE 190\\musegan\\exp\\my_experiment\\model\\model.ckpt-0"
+all_model_checkpoint_paths: "D:\\Coursework\\CSE 190\\musegan\\exp\\my_experiment\\model\\model.ckpt-0"
