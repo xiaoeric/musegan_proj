@@ -18,6 +18,6 @@ if [ -z "$2" ]; then
 else
   gpu="$2"
 fi
-python3 "$DIR/../src/inference.py" --checkpoint_dir "$1/model" \
+python "$DIR/../src/inference.py" --checkpoint_dir "$1/model" \
   --result_dir "$1/results/inference" --params "$1/params.yaml" \
   --config "$1/config.yaml" --runs 10 --gpu "$gpu"

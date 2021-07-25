@@ -5,7 +5,8 @@ import argparse
 from pprint import pformat
 import numpy as np
 import scipy.stats
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from musegan.config import LOGLEVEL, LOG_FORMAT
 from musegan.data import load_data, get_samples
 from musegan.model import Model
