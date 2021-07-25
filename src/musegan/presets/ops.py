@@ -1,5 +1,6 @@
 """Tensorflow ops."""
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 CONV_KERNEL_INITIALIZER = tf.truncated_normal_initializer(stddev=0.05)
 DENSE_KERNEL_INITIALIZER = tf.truncated_normal_initializer(stddev=0.05)
@@ -9,7 +10,7 @@ dense = lambda i, u: tf.layers.dense(
 conv2d = lambda i, f, k, s: tf.layers.conv2d(
     i, f, k, s, kernel_initializer=CONV_KERNEL_INITIALIZER)
 conv3d = lambda i, f, k, s: tf.layers.conv3d(
-    i, f, k, s, kernel_initializer=CONV_KERNEL_INITIALIZER)
+    i, f, k, s, padding='same', kernel_initializer=CONV_KERNEL_INITIALIZER)
 tconv2d = lambda i, f, k, s: tf.layers.conv2d_transpose(
     i, f, k, s, kernel_initializer=CONV_KERNEL_INITIALIZER)
 tconv3d = lambda i, f, k, s: tf.layers.conv3d_transpose(

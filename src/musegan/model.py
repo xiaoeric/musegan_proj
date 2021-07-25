@@ -3,7 +3,8 @@ import os.path
 import logging
 import imageio
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from musegan.io_utils import pianoroll_to_image, vector_to_image
 from musegan.io_utils import image_grid, save_pianoroll
 from musegan.losses import get_adv_losses
@@ -27,7 +28,7 @@ class Model:
     def __init__(self, params, name='Model'):
         self.name = name
 
-        with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE) as scope:
+        with tf.variable_scope(self.name, reuse=tf.compat.v1.AUTO_REUSE) as scope:
 
             # Save the variable scope object
             self.scope = scope
@@ -86,6 +87,8 @@ class Model:
             else:
                 nodes['z'] = z
 
+            print('NODES Z SHAPE', nodes['z'].shape)
+
             # Get slope tensor (for straight-through estimators)
             nodes['slope'] = tf.get_variable(
                 'slope', [], tf.float32, tf.constant_initializer(1.0),
@@ -129,7 +132,11 @@ class Model:
             if config['use_gradient_penalties']:
                 eps_x = tf.random_uniform(
                     [config['batch_size']] + [1] * len(params['data_shape']))
-                inter_x = eps_x * x + (1.0 - eps_x) * nodes['fake_x']
+                print('eps_x shape', eps_x.shape)
+                print('fake_x shape', nodes['fake_x'].shape)
+                inter_x_1 = eps_x * x
+                inter_x_2 = (1.0 - eps_x) * nodes['fake_x']
+                inter_x = inter_x_1 + inter_x_2
                 dis_x_inter_out = self.dis(inter_x, y, True)
                 gradient_x = tf.gradients(dis_x_inter_out, inter_x)[0]
                 slopes_x = tf.sqrt(1e-8 + tf.reduce_sum(

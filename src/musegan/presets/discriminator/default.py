@@ -1,5 +1,6 @@
 """This file defines the network architecture for the discriminator."""
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from tensorflow.nn import relu, leaky_relu, tanh, sigmoid
 from ..ops import dense, conv3d, get_normalization
 
@@ -65,7 +66,7 @@ class Discriminator:
 
             # Shared network
             with tf.variable_scope('shared'):
-                h = conv_layer(h, 128, (1, 4, 3), (1, 4, 2))         # 4, 4, 3
+                h = conv_layer(h, 128, (1, 4, 3), (1, 4, 3))         # 4, 4, 3
                 h = conv_layer(h, 256, (1, 4, 3), (1, 4, 3))         # 4, 1, 1
 
             # Chroma stream

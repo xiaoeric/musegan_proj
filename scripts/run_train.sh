@@ -15,5 +15,5 @@ if [ -z "$2" ]; then
 else
   gpu="$2"
 fi
-python3 "$DIR/../src/train.py" --exp_dir "$1" --params "$1/params.yaml" \
+python "$DIR/../src/train.py" --exp_dir "$1" --params "$1/params.yaml" \
   --config "$1/config.yaml" --gpu "$gpu"

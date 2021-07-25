@@ -5,7 +5,8 @@ import argparse
 from pprint import pformat
 import numpy as np
 import scipy.stats
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from musegan.config import LOGLEVEL, LOG_FORMAT
 from musegan.data import load_data, get_dataset, get_samples
 from musegan.metrics import get_save_metric_ops
@@ -70,7 +71,9 @@ def setup():
     setup_dirs(config)
 
     # Setup loggers
-    del logging.getLogger('tensorflow').handlers[0]
+    logger = logging.getLogger('tensorflow')
+    if len(logger.handlers):
+        del logger.handlers[0]
     setup_loggers(config['log_dir'])
 
     # Setup GPUs
@@ -170,6 +173,7 @@ def main():
     # ================================== Data ==================================
     # Load training data
     train_x, _ = load_training_data(params, config)
+    print('TRAINING DATA SHAPE', train_x.shape)
 
     # ================================= Model ==================================
     # Build model

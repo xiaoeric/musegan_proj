@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 import numpy as np
-from pypianoroll import Multitrack, Track
+from pypianoroll import read, Multitrack, Track
 
 FAMILY_NAMES = [
     "drum",
@@ -83,8 +83,8 @@ def check_which_family(track):
 
 
 def segment_quality(pianoroll, threshold_pitch, threshold_beats):
-    pitch_sum = np.sum(np.sum(pianoroll.pianoroll, axis=0) > 0)
-    beat_sum = np.sum(np.sum(pianoroll.pianoroll, axis=1) > 0)
+    pitch_sum = np.sum(np.sum(pianoroll, axis=0) > 0)
+    beat_sum = np.sum(np.sum(pianoroll, axis=1) > 0)
     return (
         (pitch_sum >= threshold_pitch) and (beat_sum >= threshold_beats),
         (pitch_sum, beat_sum),
@@ -108,7 +108,8 @@ def main():
 
     for filename in filenames:
         print(f"Processing {filename}")
-        multitrack = Multitrack(filename)
+        multitrack = read(filename)
+        # print(type(multitrack))
         downbeat = multitrack.downbeat
 
         num_bar = len(downbeat) // resolution
@@ -130,6 +131,7 @@ def main():
             ] * 5
             best_score = [-1] * 5
             for track in multitrack.tracks:
+                # print(type(track))
                 tmp_map = check_which_family(track)
                 in_family = np.where(tmp_map)[0]
 
@@ -138,6 +140,7 @@ def main():
                 family = in_family[0]
 
                 tmp_pianoroll = track[st:ed:down_sample]
+                # print(type(tmp_pianoroll))
                 is_ok, score = segment_quality(
                     tmp_pianoroll,
                     FAMILY_THRESHOLDS[family][0],
@@ -151,7 +154,7 @@ def main():
 
             hop_iter = np.random.randint(0, 1) + hop_size
             song_ok_segments.append(
-                Multitrack(tracks=best_instr, beat_resolution=12)
+                Multitrack(tracks=best_instr, resolution=12)
             )
 
         count_ok_segment = len(song_ok_segments)
@@ -194,15 +197,15 @@ def main():
 
     result = np.concatenate(compiled_list, axis=0)
     print(f"output shape: {result.shape}")
-    if args.outfile.endswith(".npz"):
-        np.savez_compressed(
-            args.outfile,
-            nonzero=np.array(result.nonzero()),
-            shape=result.shape,
-        )
-    else:
-        np.save(args.outfile, result)
-    print(f"Successfully saved training data to : {args.outfile}")
+#    if args.output_filename.endswith(".npz"):
+#        np.savez_compressed(
+#            args.outfile,
+#            nonzero=np.array(result.nonzero()),
+#            shape=result.shape,
+#        )
+#    else:
+    np.save(args.output_filename, result)
+    print(f"Successfully saved training data to : {args.output_filename}")
 
 
 if __name__ == "__main__":

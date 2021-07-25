@@ -1,7 +1,8 @@
 """This file defines the metrics used to evaluate the generated results."""
 import os
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from musegan.utils import make_sure_path_exists
 
 # --- Utilities ----------------------------------------------------------------
@@ -176,7 +177,7 @@ def get_metric_ops(tensor, beat_resolution):
         'polyphonic_rate': polyphonic_rate(tensor),
         'in_scale_ratio': in_scale_rate(chroma),
         'qualified_note_rate': qualified_note_rate(tensor),
-        'drum_in_pattern_rate': drum_in_pattern_rate(tensor[..., 0]),
+        # 'drum_in_pattern_rate': drum_in_pattern_rate(tensor[..., 0]),
         'harmonicity': harmonicity(chroma[..., 1:], beat_resolution),
     }
     return metric_ops
