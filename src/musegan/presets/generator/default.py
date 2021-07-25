@@ -2,7 +2,7 @@
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 from tensorflow.compat.v1.nn import relu, leaky_relu, tanh, sigmoid
-from ops import tconv3d, get_normalization
+from ..ops import tconv3d, get_normalization
 
 NORMALIZATION = 'batch_norm' # 'batch_norm', 'layer_norm'
 ACTIVATION = relu # relu, leaky_relu, tanh, sigmoid
