@@ -261,9 +261,9 @@ def save_pianoroll(filename, pianoroll, programs, is_drums, tempo,
     tracks = []
     for idx in range(pianoroll_.shape[2]):
         tracks.append(pypianoroll.Track(
-            pianoroll_[..., idx], programs[idx], is_drums[idx]))
+            pianoroll=pianoroll_[..., idx], program=programs[idx], is_drum=is_drums[idx]))
 
     # Create and save the multitrack
     multitrack = pypianoroll.Multitrack(
-        tracks=tracks, tempo=tempo, beat_resolution=beat_resolution)
+        tracks=tracks, tempo=np.array([tempo]), resolution=beat_resolution)
     multitrack.save(filename)
