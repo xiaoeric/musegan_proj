@@ -1,7 +1,7 @@
 """This file defines the network architecture for the discriminator."""
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.nn import relu, leaky_relu, tanh, sigmoid
+from tensorflow.compat.v1.nn import relu, leaky_relu, tanh, sigmoid
 from ..ops import dense, conv3d, get_normalization
 
 NORMALIZATION = None # 'batch_norm', 'layer_norm', None
