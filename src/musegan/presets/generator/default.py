@@ -1,8 +1,8 @@
 """This file defines the network architecture for the generator."""
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.nn import relu, leaky_relu, tanh, sigmoid
-from ..ops import tconv3d, get_normalization
+from tf.nn import relu, leaky_relu, tanh, sigmoid
+from ops import tconv3d, get_normalization
 
 NORMALIZATION = 'batch_norm' # 'batch_norm', 'layer_norm'
 ACTIVATION = relu # relu, leaky_relu, tanh, sigmoid
