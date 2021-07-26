@@ -21,7 +21,7 @@ n_dis_updates_per_gen_update: 5
 initial_learning_rate: 0.001
 use_learning_rate_decay: true
 learning_rate_schedule:
-  start: 45000
+  start: 0
   end: ~
   end_value: 0.0
 adam:
