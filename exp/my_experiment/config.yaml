@@ -1,10 +1,10 @@
 # Experiment
 n_jobs: 20
 log_loss_steps: 1 # set to 0 to disable loss logging
-save_samples_steps: 100 # set to 0 to disable saving samples
+save_samples_steps: 10 # set to 0 to disable saving samples
 save_summaries_steps: 0 # set to 0 to disable saving summaries
-save_checkpoint_steps: 10000 # set to 0 to disable saving checkpoints
-evaluate_steps: 100 # set to 0 to disable evaluation
+save_checkpoint_steps: 100 # set to 0 to disable saving checkpoints
+evaluate_steps: 10 # set to 0 to disable evaluation
 
 # Data
 data_source: 'npy' # 'sa', 'npy', 'npz'
@@ -13,7 +13,7 @@ use_random_transpose: false # randomly transpose the piano-rolls at training
 use_train_test_split: false # split the piano-rolls at training
 
 # Training
-steps: 50000
+steps: 10000
 batch_size: 64
 n_dis_updates_per_gen_update: 5
 
@@ -46,12 +46,11 @@ save_image_samples: true
 save_pianoroll_samples: true
 midi:
   lowest_pitch: 24 # the lowest pitch of the piano-rolls
-  programs: [0, 0, 25, 33, 48]
-  is_drums: [1, 0, 0, 0, 0]
+  programs: [0, 0, 0, 0]
+  is_drums: [0, 0, 0, 0, 0]
   tempo: 100 # in bpm
 colormap:
   - [1., 0., 0.]
   - [1., .5, 0.]
   - [0., 1., 0.]
   - [0., 0., 1.]
-  - [0., .5, 1.]
