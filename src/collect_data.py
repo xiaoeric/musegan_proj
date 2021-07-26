@@ -6,11 +6,10 @@ import numpy as np
 from pypianoroll import read, Multitrack, Track
 
 FAMILY_NAMES = [
-    "drum",
+    "soprano",
+    "alto",
+    "tenor",
     "bass",
-    "guitar",
-    "string",
-    "piano",
 ]
 
 FAMILY_THRESHOLDS = [
@@ -94,8 +93,8 @@ def segment_quality(pianoroll, threshold_pitch, threshold_beats):
 def main():
     """Main function."""
     num_consecutive_bar = 4
-    resolution = 12
-    down_sample = 2
+    resolution = 48
+    down_sample = 1
     count_total_segments = 0
     ok_segment_list = []
     hop_size = num_consecutive_bar / 4
@@ -128,29 +127,15 @@ def main():
                 Track(
                     pianoroll=np.zeros((num_consecutive_bar * resolution, 128))
                 )
-            ] * 5
-            best_score = [-1] * 5
-            for track in multitrack.tracks:
-                # print(type(track))
-                tmp_map = check_which_family(track)
-                in_family = np.where(tmp_map)[0]
-
-                if not len(in_family):
-                    continue
-                family = in_family[0]
-
-                tmp_pianoroll = track[st:ed:down_sample]
-                # print(type(tmp_pianoroll))
-                is_ok, score = segment_quality(
-                    tmp_pianoroll,
-                    FAMILY_THRESHOLDS[family][0],
-                    FAMILY_THRESHOLDS[family][1],
+            ] * 4
+            for idx, track in enumerate(multitrack.tracks):
+                new_track = Track(
+                    name=FAMILY_NAMES[idx],
+                    program=track.program,
+                    is_drum=track.is_drum,
+                    pianoroll=track.pianoroll[st:ed:down_sample]
                 )
-
-                if is_ok and sum(score) > best_score[family]:
-                    track.name = FAMILY_NAMES[family]
-                    best_instr[family] = track[st:ed:down_sample]
-                    best_score[family] = sum(score)
+                best_instr[idx] = new_track
 
             hop_iter = np.random.randint(0, 1) + hop_size
             song_ok_segments.append(
@@ -185,12 +170,15 @@ def main():
         multi_track = ok_segment_list[lidx]
         pianorolls = []
 
-        for tracks in multi_track.tracks:
-            pianorolls.append(tracks.pianoroll[:, :, np.newaxis])
+        for track in multi_track.tracks:
+            pianorolls.append(track.pianoroll[:, :, np.newaxis])
+        #print(np.shape(pianorolls))
+        pianorolls = np.concatenate(pianorolls, axis=2)[:, 24:108, :]
+        #print(np.shape(pianorolls))
 
         pianoroll_compiled = np.reshape(
-            np.concatenate(pianorolls, axis=2)[:, 24:108, :],
-            (num_consecutive_bar, resolution, 84, 5),
+            pianorolls,
+            (num_consecutive_bar, resolution, 84, 4),
         )
         pianoroll_compiled = pianoroll_compiled[np.newaxis, :] > 0
         compiled_list.append(pianoroll_compiled.astype(bool))

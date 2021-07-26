@@ -1,4 +1,4 @@
-data_shape: [4, 12, 84, 5] # (n_bars, n_timesteps, n_pitches, n_tracks)
+data_shape: [4, 48, 84, 4] # (n_bars, n_timesteps, n_pitches, n_tracks)
 beat_resolution: 12 # number of time steps used to represent a beat
 latent_dim: 128
 is_conditional: false
