@@ -93,7 +93,7 @@ def segment_quality(pianoroll, threshold_pitch, threshold_beats):
 def main():
     """Main function."""
     num_consecutive_bar = 4
-    resolution = 48
+    resolution = 16
     down_sample = 1
     count_total_segments = 0
     ok_segment_list = []
