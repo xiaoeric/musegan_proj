@@ -8,7 +8,7 @@ NORMALIZATION = None # 'batch_norm', 'layer_norm', None
 ACTIVATION = leaky_relu # relu, leaky_relu, tanh, sigmoid
 
 class Discriminator:
-    def __init__(self, n_tracks, beat_resolution=None, name='Discriminator'):
+    def __init__(self, n_tracks, beat_resolution=16, name='Discriminator'):
         self.n_tracks = n_tracks
         self.beat_resolution = beat_resolution
         self.name = name
